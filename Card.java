@@ -5,6 +5,6 @@ public Class Card {
         this.value = value;
     }
     public int getValue(){
-        return this.value
+        return this.value;
     }
 }
