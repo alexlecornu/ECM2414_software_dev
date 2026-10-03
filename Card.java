@@ -1,4 +1,4 @@
-public Class Card {
+public class Card {
     private int value;
 
     Card(int value ){

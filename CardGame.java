@@ -1,6 +1,6 @@
 import java.io.File;
 import java.util.Scanner;
-class CardGame {
+class cardGame {
     public static void main(String[] args)
     {
         // gets input pack
