@@ -8,6 +8,6 @@ class CardGame {
         System.out.println("Please enter the number of players:");
         int playerNum = playerNumInput.nextInt();
 
-        File inputPack = new File("")
+        File inputPack = new File("");
     }
 }
