@@ -8,4 +8,10 @@ public class CardDeck {
     CardDeck(){
         this.deckNumber = ++numOfDecks;
     }
+    public void enqueue(Card card) {
+        deck.add(card);
+    }
+    public Card dequeue(){
+        return deck.remove(0);
+    }
 }
