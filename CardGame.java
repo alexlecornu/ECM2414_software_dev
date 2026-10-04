@@ -1,5 +1,7 @@
 import java.io.File;
 import java.util.Scanner;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 class cardGame {
     public static void main(String[] args)
     {
@@ -12,5 +14,14 @@ class cardGame {
         File inputPack = new File(scanner.next());
         // exception handling for file here
         // unpack file into card objects
+        try (Scanner fileReader = new Scanner(inputPack) ) {
+            ArrayList<Card> pack = new ArrayList<Card>();
+            while  (fileReader.hasNextLine()) {
+            Card card = new Card(Integer.parseInt( fileReader.nextLine() ));
+            pack.add(card);
+        }}
+        catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        }
     }
 }
