@@ -14,14 +14,17 @@ public class Player{
     private static int numOfPlayers = 0;
     private CardDeck drawDeck = new CardDeck();
     private CardDeck discardDeck = new CardDeck();
+    static ArrayList<Player> activePlayers = new ArrayList<Player>();
     // this is the constructor of the Player class.
     // It uses the static numOfPlayers attribute to assign a player number and takes a name as an input.
     Player(){
         ++numOfPlayers;
-        this.name = "player" + numOfPlayers.toString();
+        this.name = "player" + numOfPlayers;
         this.number = numOfPlayers;
+        activePlayers.add(this);
     }
-
+    // These are some of the methods of the class.
+    // They are used for getting and setting attributes not defined in the constructor.
     public String getName() {
         return name;
     }
