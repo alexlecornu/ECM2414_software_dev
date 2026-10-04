@@ -5,8 +5,8 @@ public class Player{
     private String name;
     private int number;
     private static int num_of_players = 0;
-    private CardDeck draw_deck = new CardDeck();
-    private CardDeck discard_deck = new CardDeck();
+    private CardDeck drawDeck = new CardDeck();
+    private CardDeck discardDeck = new CardDeck();
 
     Player(String name, int number){
         this.name = name;
@@ -22,17 +22,17 @@ public class Player{
     public void setName(String name){
         this.name = name;
     }
-    public CardDeck getDiscard_deck() {
-        return discard_deck;
+    public CardDeck getDiscardDeck() {
+        return discardDeck;
     }
-    public CardDeck getDraw_deck(){
-        return draw_deck;
+    public CardDeck getDrawDeck(){
+        return drawDeck;
     }
-    public void setDraw_deck(CardDeck deck){
-        this.draw_deck = deck;
+    public void setDrawDeck(CardDeck deck){
+        this.drawDeck = deck;
     }
-    public void setDiscard_deck(CardDeck deck){
-        this.discard_deck = deck;
+    public void setDiscardDeck(CardDeck deck){
+        this.discardDeck = deck;
     }
 }
 
