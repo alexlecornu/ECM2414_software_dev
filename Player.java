@@ -4,13 +4,13 @@ public class Player{
     ArrayList<Card> hand = new ArrayList<Card>();
     private String name;
     private int number;
-    private static int num_of_players = 0;
+    private static int numOfPlayers = 0;
     private CardDeck drawDeck = new CardDeck();
     private CardDeck discardDeck = new CardDeck();
 
     Player(String name, int number){
         this.name = name;
-        this.number = ++num_of_players;
+        this.number = ++numOfPlayers;
     }
 
     public String getName() {
