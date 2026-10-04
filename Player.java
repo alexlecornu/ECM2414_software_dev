@@ -1,5 +1,12 @@
 import java.util.ArrayList;
-
+// This is the Player class which is responsible for each of the player objects.
+// The player class has the following attributes:
+// hand - stores the current hand. Uses a dynamic structure to allow cards to be added and removed
+// name - A string for the name of the player
+// number - an integer for the player number
+// numOfPlayers - A static integer value used to allocated the player numbers
+// drawDeck - the deck object that the player draws from
+// discardDeck - the deck object that the player discards cards to.
 public class Player{
     ArrayList<Card> hand = new ArrayList<Card>();
     private String name;
@@ -7,10 +14,12 @@ public class Player{
     private static int numOfPlayers = 0;
     private CardDeck drawDeck = new CardDeck();
     private CardDeck discardDeck = new CardDeck();
-
-    Player(String name, int number){
-        this.name = name;
-        this.number = ++numOfPlayers;
+    // this is the constructor of the Player class.
+    // It uses the static numOfPlayers attribute to assign a player number and takes a name as an input.
+    Player(){
+        ++numOfPlayers;
+        this.name = "player" + numOfPlayers.toString();
+        this.number = numOfPlayers;
     }
 
     public String getName() {
