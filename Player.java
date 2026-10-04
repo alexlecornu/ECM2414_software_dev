@@ -14,7 +14,7 @@ public class Player{
     private static int numOfPlayers = 0;
     private CardDeck drawDeck = new CardDeck();
     private CardDeck discardDeck = new CardDeck();
-    static ArrayList<Player> activePlayers = new ArrayList<Player>();
+    public static ArrayList<Player> activePlayers = new ArrayList<Player>();
     // this is the constructor of the Player class.
     // It uses the static numOfPlayers attribute to assign a player number and takes a name as an input.
     Player(){
