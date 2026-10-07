@@ -4,9 +4,11 @@ public class CardDeck {
     ArrayList<Card> deck = new ArrayList<Card>();
     private int deckNumber;
     private static int numOfDecks = 0;
+    public static ArrayList<CardDeck> activeCardDecks = new ArrayList<CardDeck>();
 
     CardDeck(){
         this.deckNumber = ++numOfDecks;
+        activeCardDecks.add(this);
     }
     public void enqueue(Card card) {
         deck.add(card);

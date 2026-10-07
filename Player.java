@@ -46,6 +46,18 @@ public class Player{
     public void setDiscardDeck(CardDeck deck){
         this.discardDeck = deck;
     }
+    public void recieveCard(Card card){
+        this.hand.add(card);
+    }
+    public static void deal(ArrayList<Card> pack){
+        for (int i = 1; i < 5; i++){
+            for (int j = 0; j < activePlayers.size(); j++ ){
+                Card newCard = pack.remove(0);
+                activePlayers.get(j).recieveCard(newCard);
+            }
+        }
+
+    }
 }
 
 

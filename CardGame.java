@@ -10,11 +10,13 @@ class CardGame {
     public static void main(String[] args)
     {
         initialise();
+
     }
 
     public static void initialise() {
         int playerNum = playerInput();
         packInput(playerNum);
+        Player.deal(Card.pack);
 
     }
     public static int playerInput(){
