@@ -16,5 +16,12 @@ public class CardDeck {
     public Card dequeue(){
         return deck.remove(0);
     }
+    public ArrayList<Card> getDeck(){
+        return this.deck;
+    }
+    public int getDeckNumber(){
+        return this.deckNumber;
+    }
+
 
 }

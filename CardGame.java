@@ -16,7 +16,7 @@ class CardGame {
     public static void initialise() {
         int playerNum = playerInput();
         packInput(playerNum);
-        Player.deal(Card.pack);
+        Player.deal(Card.pack, CardDeck.activeCardDecks);
 
     }
     public static int playerInput(){
@@ -32,9 +32,34 @@ class CardGame {
             }
             validPlayerNum = true;}
 
+        ;
         for(int i = 0; i < playerNum; i++) {
             Player player = new Player();
             CardDeck deck = new CardDeck();
+
+        }
+        // HARRY LOOK AT MY CODE
+        for (int i=0; i <Player.activePlayers.size();i++ ){
+            Player p = Player.activePlayers.get(i);
+            CardDeck dr = CardDeck.activeCardDecks.get(i);
+            p.setDrawDeck(dr);
+            if (i == Player.activePlayers.size()-1){
+                CardDeck dis = CardDeck.activeCardDecks.get(0);
+                p.setDiscardDeck(dis);
+
+            } else {
+                CardDeck dis = CardDeck.activeCardDecks.get(i+1);
+                p.setDiscardDeck(dis);
+            }
+
+
+
+        }
+        // printing the deck numbers of each player for testing purposes
+        for (int j = 0; j<Player.activePlayers.size();j++){
+
+            System.out.println(Player.activePlayers.get(j).getDrawDeck().getDeckNumber());
+            System.out.println(Player.activePlayers.get(j).getDiscardDeck().getDeckNumber());
         }
         return playerNum;
 

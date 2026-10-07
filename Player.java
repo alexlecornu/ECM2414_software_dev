@@ -12,8 +12,8 @@ public class Player{
     private String name;
     private int number;
     private static int numOfPlayers = 0;
-    private CardDeck drawDeck = new CardDeck();
-    private CardDeck discardDeck = new CardDeck();
+    private CardDeck drawDeck;
+    private CardDeck discardDeck;
     public static ArrayList<Player> activePlayers = new ArrayList<Player>();
     // this is the constructor of the Player class.
     // It uses the static numOfPlayers attribute to assign a player number and takes a name as an input.
@@ -49,7 +49,7 @@ public class Player{
     public void recieveCard(Card card){
         this.hand.add(card);
     }
-    public static void deal(ArrayList<Card> pack){
+    public static void deal(ArrayList<Card> pack, ArrayList<CardDeck> activeCardDecks){
         for (int i = 1; i < 5; i++){
             for (int j = 0; j < activePlayers.size(); j++ ){
                 Card card = pack.remove(0);
@@ -57,10 +57,11 @@ public class Player{
             }
         }
         while (pack.size() > 0){
+
             for (int i=0;i<activeCardDecks.size();i++){
                 Card card = pack.remove(0);
                 activeCardDecks.get(i).enqueue(card);
-                System.out.println(activeCardDecks.get(i).deck);
+
             }
         }
 
