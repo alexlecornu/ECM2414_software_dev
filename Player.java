@@ -52,8 +52,15 @@ public class Player{
     public static void deal(ArrayList<Card> pack){
         for (int i = 1; i < 5; i++){
             for (int j = 0; j < activePlayers.size(); j++ ){
-                Card newCard = pack.remove(0);
-                activePlayers.get(j).recieveCard(newCard);
+                Card card = pack.remove(0);
+                activePlayers.get(j).recieveCard(card);
+            }
+        }
+        while (pack.size() > 0){
+            for (int i=0;i<activeCardDecks.size();i++){
+                Card card = pack.remove(0);
+                activeCardDecks.get(i).enqueue(card);
+                System.out.println(activeCardDecks.get(i).deck);
             }
         }
 

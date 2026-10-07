@@ -16,4 +16,5 @@ public class CardDeck {
     public Card dequeue(){
         return deck.remove(0);
     }
+
 }

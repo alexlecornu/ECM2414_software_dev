@@ -34,6 +34,7 @@ class CardGame {
 
         for(int i = 0; i < playerNum; i++) {
             Player player = new Player();
+            CardDeck deck = new CardDeck();
         }
         return playerNum;
 
