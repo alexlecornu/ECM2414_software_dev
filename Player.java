@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Player extends Thread{
     ArrayList<Card> hand = new ArrayList<Card>();
     private String name;
+    private boolean hasWon = false;
     private int number;
     private static int numOfPlayers = 0;
     private CardDeck drawDeck;
@@ -55,13 +56,13 @@ public class Player extends Thread{
         }
     }
 
-    public boolean hasWon(){
+    public void checkWinState(){
     int firstVal = this.hand.get(0).getValue();
     for (Card card: this.hand){
         if (firstVal != card.getValue()) {
-            return false;}
+            this.hasWon = false;}
     }
-    return true;
+    this.hasWon = true;
     }
 
     private void drawAndDiscard() {
@@ -70,20 +71,27 @@ public class Player extends Thread{
         for (Card card: this.hand){
             if (card.getValue() != this.getNumber() ) {
                 this.removeCard(card);
-                this.discardDeck.enqueue(card);}
+                this.discardDeck.enqueue(card);
                 break;
+            }
+
+
         }
     }
 
 
     @Override
     public void run(){
-        System.out.println("Player " + this.name + " is playing");
         this.drawAndDiscard();
         System.out.println("Player " + this.name + " is drawing and discarding");
-        this.hasWon();
+        for (Player player : activePlayers){
+            if (hasWon == true){
+                CardGame.gameWon = true;
+            }
+        }
+        }
     }
-}
+
 
 
 

@@ -7,13 +7,17 @@ import java.io.IOException;
 //import java.lang.NumberFormatException;
 import java.util.ArrayList;
 class CardGame {
-    volatile static boolean gameWon = false;
+    public volatile static boolean gameWon = false;
     public static void main(String[] args)
     {
         initialise();
+        for (Player player : Player.activePlayers) {
+            player.start();
+        }
         while (!gameWon) {
             for (Player player : Player.activePlayers) {
-                player.start();
+                player.run();
+                System.out.println(gameWon);
             }
         }
     }
