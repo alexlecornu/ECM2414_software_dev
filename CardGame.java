@@ -16,10 +16,10 @@ class CardGame {
         }
         while (!gameWon) {
             for (Player player : Player.activePlayers) {
-                player.run();
                 System.out.println(gameWon);
             }
         }
+
     }
 
     public static void initialise() {

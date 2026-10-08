@@ -65,7 +65,7 @@ public class Player extends Thread{
     this.hasWon = true;
     }
 
-    private void drawAndDiscard() {
+    private synchronized void  drawAndDiscard() {
         this.addCard( this.drawDeck.dequeue() );
 
         for (Card card: this.hand){
@@ -76,19 +76,23 @@ public class Player extends Thread{
             }
 
 
-        }
-    }
+        }}
 
 
     @Override
     public void run(){
-        this.drawAndDiscard();
-        System.out.println("Player " + this.name + " is drawing and discarding");
+        System.out.println("Player " + this.getPlayerName() + " is running.");
+        for(Card card: this.hand){
+            System.out.println(card.getValue());
+        }
+        this.checkWinState();
         for (Player player : activePlayers){
             if (hasWon == true){
                 CardGame.gameWon = true;
             }
         }
+        this.drawAndDiscard();
+        System.out.println("Player " + this.name + " is drawing and discarding");
         }
     }
 
