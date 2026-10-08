@@ -61,6 +61,7 @@ class CardGame {
 
     }
 
+
     public static void packInput(int playerNum){
         Scanner scanner = new Scanner(System.in);
         boolean validPack = false;
