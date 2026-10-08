@@ -55,12 +55,8 @@ class CardGame {
 
 
         }
-        // printing the deck numbers of each player for testing purposes
-        for (int j = 0; j<Player.activePlayers.size();j++){
 
-            System.out.println(Player.activePlayers.get(j).getDrawDeck().getDeckNumber());
-            System.out.println(Player.activePlayers.get(j).getDiscardDeck().getDeckNumber());
-        }
+
         return playerNum;
 
     }

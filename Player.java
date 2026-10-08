@@ -7,7 +7,7 @@ import java.util.ArrayList;
 // numOfPlayers - A static integer value used to allocated the player numbers
 // drawDeck - the deck object that the player draws from
 // discardDeck - the deck object that the player discards cards to.
-public class Player{
+public class Player implements Thread{
     ArrayList<Card> hand = new ArrayList<Card>();
     private String name;
     private int number;
