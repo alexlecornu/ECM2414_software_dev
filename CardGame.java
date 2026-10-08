@@ -7,10 +7,15 @@ import java.io.IOException;
 //import java.lang.NumberFormatException;
 import java.util.ArrayList;
 class CardGame {
+    volatile static boolean gameWon = false;
     public static void main(String[] args)
     {
         initialise();
-
+        while (!gameWon) {
+            for (Player player : Player.activePlayers) {
+                player.start();
+            }
+        }
     }
 
     public static void initialise() {
@@ -36,8 +41,8 @@ class CardGame {
         for(int i = 0; i < playerNum; i++) {
             Player player = new Player();
             CardDeck deck = new CardDeck();
-
         }
+
         // HARRY LOOK AT MY CODE
         for (int i=0; i <Player.activePlayers.size();i++ ){
             Player p = Player.activePlayers.get(i);
@@ -55,10 +60,7 @@ class CardGame {
 
 
         }
-
-
         return playerNum;
-
     }
 
 
@@ -113,8 +115,8 @@ class CardGame {
             }
                 catch (NumberFormatException e) {
                 System.out.println("Multiple integers on the same row, invalid pack file \n");
-                continue;
-            } }
+                continue;}
+        }
         }
     }
 

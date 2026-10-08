@@ -78,10 +78,12 @@ public class Player extends Thread{
 
     @Override
     public void run(){
-    //check if player has won initially
-    //Draw and discard from decks in one atomic action
-    // check if player has won}
-} }
+        System.out.println("Player " + this.name + " is playing");
+        this.drawAndDiscard();
+        System.out.println("Player " + this.name + " is drawing and discarding");
+        this.hasWon();
+    }
+}
 
 
 
