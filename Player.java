@@ -40,11 +40,6 @@ public class Player extends Thread{
 
     public void removeCard(Card card){this.hand.remove(card);}
 
-    public void stopRun(){
-        running = false;
-        interrupt();
-    }
-
     public static void deal(ArrayList<Card> pack, ArrayList<CardDeck> activeCardDecks){
         for (int i = 1; i < 5; i++){
             for (int j = 0; j < activePlayers.size(); j++ ){
@@ -61,14 +56,36 @@ public class Player extends Thread{
         }
     }
 
-    public void checkWinState(){
+    public synchronized int[] getHandValues() {
+        int[] handValues = new int[4];
+        int i=0;
+        for (Card card : this.hand){
+            handValues[i] = card.getValue();
+            i++;
+
+        }
+        return handValues;
+
+    }
+
+    public synchronized void checkWinState(){
     int firstVal = this.hand.get(0).getValue();
+    boolean allEqual = true;
     for (Card card: this.hand){
         if (firstVal != card.getValue()) {
-            this.running = false;}
+            allEqual = false;
+        }
     }
-    this.running = true;
-    }
+    if (allEqual){
+        System.out.println("Player " + this.name + " has won");
+        running = false;
+        for (Player player : activePlayers){
+            player.interrupt();
+            System.out.println("Player " + player.getPlayerName() + " is stopped.");
+            System.out.println(player.getHandValues());
+        }
+
+    }}
 
     private synchronized void  drawAndDiscard() {
         this.addCard( this.drawDeck.dequeue() );
@@ -88,12 +105,8 @@ public class Player extends Thread{
     public void run() {
         while (running) {
             System.out.println("Player " + this.getPlayerName() + " is running.");
-            for (Card card : this.hand) {
-                System.out.println(card.getValue());
-            }
             this.checkWinState();
-            if (!running){
-                System.out.println("Player " + this.getPlayerName() + " is stopped.");
+            if (!running) {
                 break;
             }
             this.drawAndDiscard();
