@@ -77,15 +77,15 @@ public class Player extends Thread{
         }
     }
     if (allEqual){
-        System.out.println("Player " + this.name + " has won");
+        System.out.println(this.name + " has won");
         running = false;
         for (Player player : activePlayers){
             player.interrupt();
-            System.out.println("Player " + player.getPlayerName() + " is stopped.");
-            System.out.println(player.getHandValues());
+            System.out.println(player.getPlayerName() + " is stopped.");
+            }
         }
 
-    }}
+    }
 
     private synchronized void  drawAndDiscard() {
         this.addCard( this.drawDeck.dequeue() );
