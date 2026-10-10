@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class CardDeck {
     ArrayList<Card> deck = new ArrayList<Card>();
     private int deckNumber;
+    private int initalSize;
     private static int numOfDecks = 0;
     public static ArrayList<CardDeck> activeCardDecks = new ArrayList<CardDeck>();
 
@@ -22,6 +23,9 @@ public class CardDeck {
     public int getDeckNumber(){
         return this.deckNumber;
     }
+    public int getDeckSize(){return this.deck.size();}
+    public void setInitialSize(int size){this.initalSize = size;}
+    public int getInitialSize(){return this.initalSize;}
 
 
 }

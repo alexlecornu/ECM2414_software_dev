@@ -1,4 +1,7 @@
 import java.util.ArrayList;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.BrokenBarrierException;
+
 // This is the Player class which is responsible for each of the player objects.
 // The player class has the following attributes:
 // hand - stores the current hand. Uses a dynamic structure to allow cards to be added and removed
@@ -16,6 +19,7 @@ public class Player extends Thread{
     private CardDeck drawDeck;
     private CardDeck discardDeck;
     public static ArrayList<Player> activePlayers = new ArrayList<Player>();
+    private static CyclicBarrier barrier;
     // this is the constructor of the Player class.
     // It uses the static numOfPlayers attribute to assign a player number and takes a name as an input.
     Player(){
@@ -33,6 +37,10 @@ public class Player extends Thread{
     public CardDeck getDiscardDeck() {return discardDeck;}
     public CardDeck getDrawDeck(){return drawDeck;}
     public void setDrawDeck(CardDeck deck){this.drawDeck = deck;}
+
+    public static void setBarrier(){
+        barrier = new CyclicBarrier(numOfPlayers);
+    }
 
     public void setDiscardDeck(CardDeck deck){this.discardDeck = deck;}
 
@@ -54,19 +62,11 @@ public class Player extends Thread{
                 activeCardDecks.get(i).enqueue(card);
             }
         }
-    }
-
-    public synchronized int[] getHandValues() {
-        int[] handValues = new int[4];
-        int i=0;
-        for (Card card : this.hand){
-            handValues[i] = card.getValue();
-            i++;
-
+        for (CardDeck deck : activeCardDecks) {
+            deck.setInitialSize(deck.getDeckSize());
         }
-        return handValues;
-
     }
+
 
     public synchronized void checkWinState(){
     int firstVal = this.hand.get(0).getValue();
@@ -88,6 +88,10 @@ public class Player extends Thread{
     }
 
     private synchronized void  drawAndDiscard() {
+        while (this.drawDeck.getDeckSize() < this.drawDeck.getInitialSize()){
+            continue;
+        }
+
         this.addCard( this.drawDeck.dequeue() );
 
         for (Card card: this.hand){
@@ -105,11 +109,19 @@ public class Player extends Thread{
     public void run() {
         while (running) {
             System.out.println("Player " + this.getPlayerName() + " is running.");
+            try{barrier.await();}
+            catch(InterruptedException e){}
+            catch(BrokenBarrierException e){}
             this.checkWinState();
+
             if (!running) {
                 break;
             }
+
             this.drawAndDiscard();
+            try{barrier.await();}
+            catch(InterruptedException e){}
+            catch(BrokenBarrierException e){}
             System.out.println("Player " + this.name + " is drawing and discarding");
         }
         }
