@@ -7,21 +7,16 @@ import java.io.IOException;
 //import java.lang.NumberFormatException;
 import java.util.ArrayList;
 class CardGame {
-    public volatile static boolean gameWon = false;
+    private volatile static boolean gameWon = false;
     public static void main(String[] args)
     {
         initialise();
         for (Player player : Player.activePlayers) {
             player.start();
         }
-        for (Player player : Player.activePlayers) {
-            try{ player.join();}
-            catch (InterruptedException e){}
-        }
         while (!gameWon) {
             for (Player player : Player.activePlayers) {
-                player.run();
-                System.out.println(gameWon);
+
             }
             if (gameWon){
                 for (Player player : Player.activePlayers) {
@@ -37,6 +32,9 @@ class CardGame {
         packInput(playerNum);
         Player.deal(Card.pack, CardDeck.activeCardDecks);
 
+    }
+    public static void stopGame(){
+        gameWon = true;
     }
     public static int playerInput(){
         boolean validPlayerNum = false;

@@ -10,8 +10,7 @@ import java.util.ArrayList;
 public class Player extends Thread{
     ArrayList<Card> hand = new ArrayList<Card>();
     private String name;
-    private volatile boolean hasWon = false;
-    private volatile boolean running = true;
+    private static volatile boolean running = true;
     private int number;
     private static int numOfPlayers = 0;
     private CardDeck drawDeck;
@@ -42,7 +41,8 @@ public class Player extends Thread{
     public void removeCard(Card card){this.hand.remove(card);}
 
     public void stopRun(){
-        this.running = false;
+        running = false;
+        interrupt();
     }
 
     public static void deal(ArrayList<Card> pack, ArrayList<CardDeck> activeCardDecks){
@@ -65,9 +65,9 @@ public class Player extends Thread{
     int firstVal = this.hand.get(0).getValue();
     for (Card card: this.hand){
         if (firstVal != card.getValue()) {
-            this.hasWon = false;}
+            this.running = false;}
     }
-    this.hasWon = true;
+    this.running = true;
     }
 
     private synchronized void  drawAndDiscard() {
@@ -92,10 +92,9 @@ public class Player extends Thread{
                 System.out.println(card.getValue());
             }
             this.checkWinState();
-            for (Player player : activePlayers) {
-                if (hasWon == true) {
-                    CardGame.gameWon = true;
-                }
+            if (!running){
+                System.out.println("Player " + this.getPlayerName() + " is stopped.");
+                break;
             }
             this.drawAndDiscard();
             System.out.println("Player " + this.name + " is drawing and discarding");
