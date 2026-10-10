@@ -14,9 +14,19 @@ class CardGame {
         for (Player player : Player.activePlayers) {
             player.start();
         }
+        for (Player player : Player.activePlayers) {
+            try{ player.join();}
+            catch (InterruptedException e){}
+        }
         while (!gameWon) {
             for (Player player : Player.activePlayers) {
+                player.run();
                 System.out.println(gameWon);
+            }
+            if (gameWon){
+                for (Player player : Player.activePlayers) {
+                    player.stopRun();
+                }
             }
         }
 
