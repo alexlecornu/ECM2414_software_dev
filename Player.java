@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.BrokenBarrierException;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 // This is the Player class which is responsible for each of the player objects.
 // The player class has the following attributes:
@@ -13,6 +16,7 @@ import java.util.concurrent.BrokenBarrierException;
 public class Player extends Thread{
     ArrayList<Card> hand = new ArrayList<Card>();
     private String name;
+    private File outputFile;
     private static volatile boolean running = true;
     private int number;
     private static int numOfPlayers = 0;
@@ -26,6 +30,11 @@ public class Player extends Thread{
         ++numOfPlayers;
         this.name = "player" + numOfPlayers;
         this.number = numOfPlayers;
+        try {
+            this.outputFile = new File(name +"_output.txt");
+            this.outputFile.createNewFile();
+        }
+        catch(IOException e){};
         activePlayers.add(this);
     }
     // These are some of the methods of the class.
@@ -102,6 +111,16 @@ public class Player extends Thread{
 
 
         }}
+
+    private void writeToFile(String message) {
+        try {
+            FileWriter writer = new FileWriter(this.outputFile);
+            writer.write(message);
+            writer.close();
+        }
+        catch(IOException e){};
+
+    }
 
 
     @Override
