@@ -33,7 +33,6 @@ public class Player extends Thread{
     public String getPlayerName() {return name;}
     public int getNumber() {return number;}
     public ArrayList<Card> getHand() {return hand;}
-    public void setPlayerName(String name){this.name = name;}
     public CardDeck getDiscardDeck() {return discardDeck;}
     public CardDeck getDrawDeck(){return drawDeck;}
     public void setDrawDeck(CardDeck deck){this.drawDeck = deck;}
@@ -110,7 +109,7 @@ public class Player extends Thread{
         while (running) {
             System.out.println("Player " + this.getPlayerName() + " is running.");
             try{barrier.await();}
-            catch(InterruptedException e){}
+            catch(InterruptedException e){break;}
             catch(BrokenBarrierException e){}
             this.checkWinState();
 
@@ -120,7 +119,7 @@ public class Player extends Thread{
 
             this.drawAndDiscard();
             try{barrier.await();}
-            catch(InterruptedException e){}
+            catch(InterruptedException e){break;}
             catch(BrokenBarrierException e){}
             System.out.println("Player " + this.name + " is drawing and discarding");
         }
