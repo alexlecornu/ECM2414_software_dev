@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 //import java.lang.NumberFormatException;
-import java.util.ArrayList;
+
 class CardGame {
     public static void main(String[] args)
     {

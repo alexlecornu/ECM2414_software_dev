@@ -15,10 +15,10 @@ import java.io.IOException;
 // discardDeck - the deck object that the player discards cards to.
 public class Player extends Thread{
     ArrayList<Card> hand = new ArrayList<Card>();
-    private String name;
+    private final String name;
     private File outputFile;
     private static volatile boolean running = true;
-    private int number;
+    private final int number;
     private static int numOfPlayers = 0;
     private CardDeck drawDeck;
     private CardDeck discardDeck;
@@ -34,7 +34,7 @@ public class Player extends Thread{
             this.outputFile = new File(name +"_output.txt");
             this.outputFile.createNewFile();
         }
-        catch(IOException e){};
+        catch(IOException e){}
         activePlayers.add(this);
     }
     // These are some of the methods of the class.
@@ -52,7 +52,7 @@ public class Player extends Thread{
 
     public static void writeInitialHands() {
         for (Player player: activePlayers){
-            player.writeToFile("player " + player.getNumber()); + " initial hand " +
+            player.writeToFile("player " + player.getNumber()); + " initial hand ")
         }
     }
 
@@ -95,6 +95,7 @@ public class Player extends Thread{
     for (Card card: this.hand){
         if (firstVal != card.getValue()) {
             allEqual = false;
+            break;
         }
     }
     if (allEqual){
@@ -131,7 +132,7 @@ public class Player extends Thread{
             writer.write(message);
             writer.close();
         }
-        catch(IOException e){};
+        catch(IOException e){}
 
     }
 
