@@ -1,3 +1,4 @@
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +13,10 @@ public class CardDeck {
 
     CardDeck(){
         this.deckNumber = ++numOfDecks;
-        try {
-            this.outputFile = new File("deck" + deckNumber + "_output.txt");
-            this.outputFile.createNewFile();
-        }
-        catch(IOException e){};
+        this.outputFile = new File("deck" + deckNumber + "_output.txt");
+        try (FileWriter overwrite = new FileWriter(outputFile, false)) {
+        } catch (IOException e) {};
+
         activeCardDecks.add(this);
     }
     public void enqueue(Card card) {
@@ -35,5 +35,23 @@ public class CardDeck {
     public void setInitialSize(int size){this.initalSize = size;}
     public int getInitialSize(){return this.initalSize;}
 
+    public void writeToFile(){
+        StringBuilder deckStr = new StringBuilder();
+        for (Card card: this.getDeck()){
+            deckStr.append(card.getValue());
+            if (card == this.getDeck().getLast()){
+                continue;
+            }
+            deckStr.append(" ");
+        }
+        String deckMsg = ("deck"+this.getDeckNumber()+ " contents: "+deckStr);
+        try {
+            FileWriter writer = new FileWriter(this.outputFile, true);
+            writer.write(deckMsg);
+            writer.write("\n");
+            writer.close();
+        }
+        catch(IOException e){}
+    }}
 
-}
+

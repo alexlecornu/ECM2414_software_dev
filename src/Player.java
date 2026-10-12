@@ -30,11 +30,10 @@ public class Player extends Thread{
         ++numOfPlayers;
         this.name = "player" + numOfPlayers;
         this.number = numOfPlayers;
-        try {
-            this.outputFile = new File(name +"_output.txt");
-            this.outputFile.createNewFile();
-        }
-        catch(IOException e){}
+        this.outputFile = new File(name +"_output.txt");
+        //overwrites current output file
+        try (FileWriter overwrite = new FileWriter(outputFile, false)) {
+        } catch (IOException e) {};
         activePlayers.add(this);
     }
     // These are some of the methods of the class.
@@ -52,8 +51,8 @@ public class Player extends Thread{
 
     public static void writeInitialHands() {
         for (Player player: activePlayers){
-            String writeMessage = "player " + player.getNumber() + " initial hand " + player.handToStr();
-            player.writeToFile(writeMessage);
+            String writeMsg = "player " + player.getNumber() + " initial hand " + player.handToStr();
+            player.writeToFile(writeMsg);
         }
     }
 
@@ -105,38 +104,50 @@ public class Player extends Thread{
         }
     }
     if (allEqual){
-        System.out.println(this.name + " has won");
+        String winMsg = ("player " + this.getNumber() + " wins");
+        System.out.println(winMsg);
+        this.writeToFile(winMsg);
         running = false;
         for (Player player : activePlayers){
             player.interrupt();
-            System.out.println(player.getPlayerName() + " is stopped.");
+            if (player != this){
+                String notWinMsg = ("player "+this.getNumber()+" has informed "+" player "+player.getNumber()+ " that player " + this.getNumber() + " has won");
+                player.writeToFile(notWinMsg);
             }
+            String exitMsg = ("player " + player.getNumber() + " exits");
+            String handMsg = ("player " + player.getNumber() + " hand: " + player.handToStr());
+            player.writeToFile(exitMsg);
+            player.writeToFile(handMsg);
+            }
+        for (CardDeck deck : CardDeck.activeCardDecks){
+            deck.writeToFile();
+        }
         }
 
     }
 
-    protected synchronized void  drawAndDiscard() {
+    private synchronized void  drawAndDiscard() {
         while (this.drawDeck.getDeckSize() < this.drawDeck.getInitialSize()){
             continue;
         }
         Card cardToDraw = this.drawDeck.dequeue();
-        String message = ("player " + this.getNumber() + " draws a " + cardToDraw.getValue() + " from deck " + this.drawDeck.getDeckNumber());
-        this.writeToFile(message);
+        String drawMsg = ("player " + this.getNumber() + " draws a " + cardToDraw.getValue() + " from deck " + this.drawDeck.getDeckNumber());
         this.addCard( cardToDraw );
+        this.writeToFile(drawMsg);
 
         for (Card card: this.hand){
             if (card.getValue() != this.getNumber() ) {
                 this.removeCard(card);
                 this.discardDeck.enqueue(card);
+                String discardMsg = ("player " + this.getNumber() + " discards a " + card.getValue() + " to deck " + this.discardDeck.getDeckNumber());
+                this.writeToFile(discardMsg);
                 break;
             }
-
-
         }}
 
     private void writeToFile(String message) {
         try {
-            FileWriter writer = new FileWriter(this.outputFile);
+            FileWriter writer = new FileWriter(this.outputFile,true);
             writer.write(message);
             writer.write("\n");
             writer.close();
@@ -149,7 +160,6 @@ public class Player extends Thread{
     @Override
     public void run() {
         while (running) {
-            System.out.println("Player " + this.getPlayerName() + " is running.");
             try{barrier.await();}
             catch(InterruptedException e){break;}
             catch(BrokenBarrierException e){}
@@ -160,10 +170,11 @@ public class Player extends Thread{
             }
 
             this.drawAndDiscard();
+            String handMsg = ("player " + this.getNumber() + " current hand is " + this.handToStr());
+            this.writeToFile(handMsg);
             try{barrier.await();}
             catch(InterruptedException e){break;}
             catch(BrokenBarrierException e){}
-            System.out.println("Player " + this.name + " is drawing and discarding");
         }
         }
     }

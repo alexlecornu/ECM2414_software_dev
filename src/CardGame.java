@@ -110,7 +110,6 @@ class CardGame {
                     Card card = new Card(nextVal);
                     }
                validPack = true;
-               System.out.println("Valid pack");
             } catch (FileNotFoundException e) {
                 System.out.println("File not found \n");
                 continue;
