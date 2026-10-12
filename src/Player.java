@@ -115,14 +115,14 @@ public class Player extends Thread{
 
     }
 
-    private synchronized void  drawAndDiscard() {
+    protected synchronized void  drawAndDiscard() {
         while (this.drawDeck.getDeckSize() < this.drawDeck.getInitialSize()){
             continue;
         }
         Card cardToDraw = this.drawDeck.dequeue();
         String message = ("player " + this.getNumber() + " draws a " + cardToDraw.getValue() + " from deck " + this.drawDeck.getDeckNumber());
         this.writeToFile(message);
-        this.addCard( this.drawDeck.dequeue() );
+        this.addCard( cardToDraw );
 
         for (Card card: this.hand){
             if (card.getValue() != this.getNumber() ) {
