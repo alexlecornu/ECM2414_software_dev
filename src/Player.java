@@ -52,15 +52,21 @@ public class Player extends Thread{
 
     public static void writeInitialHands() {
         for (Player player: activePlayers){
-            player.writeToFile("player " + player.getNumber()); + " initial hand ")
+            String writeMessage = "player " + player.getNumber() + " initial hand " + player.handToStr();
+            player.writeToFile(writeMessage);
         }
     }
 
     private StringBuilder handToStr() {
         StringBuilder handStr = new StringBuilder();
         for (Card card: hand){
-            handStr.append(card.getValue() + " ");
+            handStr.append(card.getValue());
+            if (card == this.hand.getLast()){
+                continue;
+            }
+            handStr.append(" ");
         }
+        return handStr;
     }
 
     public void setDiscardDeck(CardDeck deck){this.discardDeck = deck;}
@@ -113,7 +119,9 @@ public class Player extends Thread{
         while (this.drawDeck.getDeckSize() < this.drawDeck.getInitialSize()){
             continue;
         }
-
+        Card cardToDraw = this.drawDeck.dequeue();
+        String message = ("player " + this.getNumber() + " draws a " + cardToDraw.getValue() + " from deck " + this.drawDeck.getDeckNumber());
+        this.writeToFile(message);
         this.addCard( this.drawDeck.dequeue() );
 
         for (Card card: this.hand){
@@ -130,6 +138,7 @@ public class Player extends Thread{
         try {
             FileWriter writer = new FileWriter(this.outputFile);
             writer.write(message);
+            writer.write("\n");
             writer.close();
         }
         catch(IOException e){}

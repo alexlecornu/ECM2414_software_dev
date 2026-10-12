@@ -10,6 +10,7 @@ class CardGame {
     public static void main(String[] args)
     {
         initialise();
+        Player.writeInitialHands();
         Player.setBarrier();
         for (Player player : Player.activePlayers) {
             player.start();
