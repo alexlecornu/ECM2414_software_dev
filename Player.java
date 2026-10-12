@@ -50,6 +50,19 @@ public class Player extends Thread{
         barrier = new CyclicBarrier(numOfPlayers);
     }
 
+    public static void writeInitialHands() {
+        for (Player player: activePlayers){
+            player.writeToFile("player " + player.getNumber()); + " initial hand " +
+        }
+    }
+
+    private StringBuilder handToStr() {
+        StringBuilder handStr = new StringBuilder();
+        for (Card card: hand){
+            handStr.append(card.getValue() + " ");
+        }
+    }
+
     public void setDiscardDeck(CardDeck deck){this.discardDeck = deck;}
 
     public void addCard(Card card){this.hand.add(card);}

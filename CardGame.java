@@ -20,6 +20,7 @@ class CardGame {
     public static void initialise() {
         int playerNum = playerInput();
         packInput(playerNum);
+
         Player.deal(Card.pack, CardDeck.activeCardDecks);
 
     }
