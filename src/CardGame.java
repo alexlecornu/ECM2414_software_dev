@@ -33,7 +33,7 @@ class CardGame {
         while (!validPlayerNum) {
             System.out.println("Please enter the number of players:");
             playerNum = scanner.nextInt();
-            if (playerNum < 0) {
+            if (playerNum < 2) {
                 System.out.println("Invalid number of players, must be greater than zero");
                 continue;
             }

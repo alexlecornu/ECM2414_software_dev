@@ -16,10 +16,22 @@ class FIFOTest {
         d.enqueue(c2);
         d.enqueue(c3);
         d.enqueue(c4);
-        // checks the first and last value in the deck to confirm
-        // that the card deck behaves like a queue
-        Assertions.assertEquals(c4, d.getDeck().getLast());
+        // checks the first value in the deck to confirm that the card deck behaves like a queue
         Assertions.assertEquals(c1,d.getDeck().getFirst());
+    }
+    @Test
+    public void enqueueTest2(){
+        Card c1 = new Card(5);
+        Card c2 = new Card(6);
+        Card c3 = new Card(7);
+        Card c4 = new Card(8);
+        CardDeck d = new CardDeck();
+        d.enqueue(c1);
+        d.enqueue(c2);
+        d.enqueue(c3);
+        d.enqueue(c4);
+        // checks the last value in the deck to confirm that the card deck behaves like a queue
+        Assertions.assertEquals(c4, d.getDeck().getLast());
     }
     @Test
     public void dequeueTest(){

@@ -8,13 +8,13 @@ public class PreferredDenominationTest {
     public static CardDeck dr = new CardDeck();
     public static CardDeck dis = new CardDeck();
 
+
     @BeforeAll
     public static void setup(){
         // create a new player and a draw and discard Deck
         p1.setDrawDeck(dr);
         p1.setDiscardDeck(dis);
-        // create the cards to assign to the player. As there is only one player their preferred number will be 1
-        // these first cards will be assigned to the players hand
+        // create the cards to assign to the player. As there is only one player their preferred number will be 1 these first cards will be assigned to the players hand
         Card c1 = new Card(1);
         Card c2 = new Card(2);
         Card c3 = new Card(1);
@@ -43,14 +43,12 @@ public class PreferredDenominationTest {
     }
     @Test
     public void checkDiscard3(){
-        // this test is used to show that
+        // this test is used to show that after a few cards have been picked up the card that matches the player number is not discarded
         p1.drawAndDiscard();
         p1.drawAndDiscard();
         p1.drawAndDiscard();
-        System.out.println(p1.getHand().get(0).getValue());
-        System.out.println(p1.getHand().get(1).getValue());
-        System.out.println(p1.getHand().get(2).getValue());
-        System.out.println(p1.getHand().get(3).getValue());
+
+        
         Assertions.assertEquals(1,p1.getHand().getLast().getValue());
     }
 }
