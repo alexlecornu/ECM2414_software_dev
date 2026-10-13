@@ -103,6 +103,7 @@ public class Player extends Thread{
             break;
         }
     }
+    // test comment
     if (allEqual){
         String winMsg = ("player " + this.getNumber() + " wins");
         System.out.println(winMsg);
