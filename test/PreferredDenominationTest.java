@@ -4,20 +4,16 @@ import org.junit.jupiter.api.Test;
 
 public class PreferredDenominationTest {
 
-    static Player p1;
-    static CardDeck dr;
-    static CardDeck dis;
+    public static Player p1 = new Player();
+    public static CardDeck dr = new CardDeck();
+    public static CardDeck dis = new CardDeck();
 
     @BeforeAll
     public static void setup(){
         // create a new player and a draw and discard Deck
-        Player p1 = new Player();
-        CardDeck dr = new CardDeck();
-        CardDeck dis = new CardDeck();
         p1.setDrawDeck(dr);
         p1.setDiscardDeck(dis);
         // create the cards to assign to the player. As there is only one player their preferred number will be 1
-
         // these first cards will be assigned to the players hand
         Card c1 = new Card(1);
         Card c2 = new Card(2);
@@ -41,6 +37,20 @@ public class PreferredDenominationTest {
     }
     @Test
     public void checkDiscard(){
+        // this test is used to show that cards 1 already in the deck are not discarded
         p1.drawAndDiscard();
+        Assertions.assertNotEquals(1,dis.getDeck().getFirst().getValue());
+    }
+    @Test
+    public void checkDiscard3(){
+        // this test is used to show that
+        p1.drawAndDiscard();
+        p1.drawAndDiscard();
+        p1.drawAndDiscard();
+        System.out.println(p1.getHand().get(0).getValue());
+        System.out.println(p1.getHand().get(1).getValue());
+        System.out.println(p1.getHand().get(2).getValue());
+        System.out.println(p1.getHand().get(3).getValue());
+        Assertions.assertEquals(1,p1.getHand().getLast().getValue());
     }
 }

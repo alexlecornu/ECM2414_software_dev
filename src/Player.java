@@ -126,7 +126,7 @@ public class Player extends Thread{
 
     }
 
-    private synchronized void  drawAndDiscard() {
+    protected synchronized void  drawAndDiscard() {
         while (this.drawDeck.getDeckSize() < this.drawDeck.getInitialSize()){
             continue;
         }
