@@ -5,50 +5,49 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-// This is the Player class which is responsible for each of the player objects.
-// The player class has the following attributes:
-// hand - stores the current hand. Uses a dynamic structure to allow cards to be added and removed
-// name - A string for the name of the player
-// number - an integer for the player number
-// numOfPlayers - A static integer value used to allocated the player numbers
-// drawDeck - the deck object that the player draws from
-// discardDeck - the deck object that the player discards cards to.
+// extends thread so each player is runnable as its own thread
 public class Player extends Thread{
-    ArrayList<Card> hand = new ArrayList<Card>();
-    private final String name;
-    private File outputFile;
+    public static ArrayList<Player> activePlayers = new ArrayList<Player>();
+    // barrier used to make sure all threads reach certain stages before the program continues
+    private static CyclicBarrier barrier;
+    // volatile so every thread can see when a player thread has stopped running
     private static volatile boolean running = true;
     private final int number;
     private static int numOfPlayers = 0;
+    private final String name;
+    private File outputFile;
     private CardDeck drawDeck;
     private CardDeck discardDeck;
-    public static ArrayList<Player> activePlayers = new ArrayList<Player>();
-    private static CyclicBarrier barrier;
-    // this is the constructor of the Player class.
-    // It uses the static numOfPlayers attribute to assign a player number and takes a name as an input.
+    ArrayList<Card> hand = new ArrayList<Card>();
+
+    //constructor
     Player(){
         ++numOfPlayers;
         this.name = "player" + numOfPlayers;
         this.number = numOfPlayers;
         this.outputFile = new File(name +"_output.txt");
-        //overwrites current output file
+        // opens file to overwrite previous contents from previous games
         try (FileWriter overwrite = new FileWriter(outputFile, false)) {
         } catch (IOException e) {};
         activePlayers.add(this);
     }
-    // These are some of the methods of the class.
-    // They are used for getting and setting attributes not defined in the constructor.
+
+    // get methods
     public String getPlayerName() {return name;}
     public int getNumber() {return number;}
     public ArrayList<Card> getHand() {return hand;}
     public CardDeck getDiscardDeck() {return discardDeck;}
     public CardDeck getDrawDeck(){return drawDeck;}
+
+    // set methods
+    public static void setBarrier(){ barrier = new CyclicBarrier(numOfPlayers);}
     public void setDrawDeck(CardDeck deck){this.drawDeck = deck;}
+    public void setDiscardDeck(CardDeck deck){this.discardDeck = deck;}
 
-    public static void setBarrier(){
-        barrier = new CyclicBarrier(numOfPlayers);
-    }
+    public void addCard(Card card){this.hand.add(card);}
+    public void removeCard(Card card){this.hand.remove(card);}
 
+    // writes each players starting hands to their respective txt files
     public static void writeInitialHands() {
         for (Player player: activePlayers){
             String writeMsg = "player " + player.getNumber() + " initial hand " + player.handToStr();
@@ -56,6 +55,7 @@ public class Player extends Thread{
         }
     }
 
+    // formats hand into the right format for writing them to a txt file
     private StringBuilder handToStr() {
         StringBuilder handStr = new StringBuilder();
         for (Card card: hand){
@@ -68,11 +68,17 @@ public class Player extends Thread{
         return handStr;
     }
 
-    public void setDiscardDeck(CardDeck deck){this.discardDeck = deck;}
+    // general purpose method used to write to the players output file
+    private void writeToFile(String message) {
+        try {
+            FileWriter writer = new FileWriter(this.outputFile,true);
+            writer.write(message);
+            writer.write("\n");
+            writer.close();
+        }
+        catch(IOException e){}
 
-    public void addCard(Card card){this.hand.add(card);}
-
-    public void removeCard(Card card){this.hand.remove(card);}
+    }
 
     public static void deal(ArrayList<Card> pack, ArrayList<CardDeck> activeCardDecks){
         for (int i = 1; i < 5; i++){
@@ -93,51 +99,23 @@ public class Player extends Thread{
         }
     }
 
-
-    public synchronized void checkWinState(){
-    int firstVal = this.hand.get(0).getValue();
-    boolean allEqual = true;
-    for (Card card: this.hand){
-        if (firstVal != card.getValue()) {
-            allEqual = false;
-            break;
-        }
-    }
-    // test comment
-    if (allEqual){
-        String winMsg = ("player " + this.getNumber() + " wins");
-        System.out.println(winMsg);
-        this.writeToFile(winMsg);
-        running = false;
-        for (Player player : activePlayers){
-            player.interrupt();
-            if (player != this){
-                String notWinMsg = ("player "+this.getNumber()+" has informed "+" player "+player.getNumber()+ " that player " + this.getNumber() + " has won");
-                player.writeToFile(notWinMsg);
-            }
-            String exitMsg = ("player " + player.getNumber() + " exits");
-            String handMsg = ("player " + player.getNumber() + " hand: " + player.handToStr());
-            player.writeToFile(exitMsg);
-            player.writeToFile(handMsg);
-            }
-        for (CardDeck deck : CardDeck.activeCardDecks){
-            deck.writeToFile();
-        }
-        }
-
-    }
-
+    // draws and discards a card, synchronized so its treated as one atomic action
     protected synchronized void  drawAndDiscard() {
+        // waits until deck has the right number of cards from players discarding before drawing
         while (this.drawDeck.getDeckSize() < this.drawDeck.getInitialSize()){
             continue;
         }
+        // dequeues card from draw deck
         Card cardToDraw = this.drawDeck.dequeue();
         String drawMsg = ("player " + this.getNumber() + " draws a " + cardToDraw.getValue() + " from deck " + this.drawDeck.getDeckNumber());
+        // adds card to hand and appends to player file
         this.addCard( cardToDraw );
         this.writeToFile(drawMsg);
 
+        // discard mechanism works by discarding the first card that isnt preferable
         for (Card card: this.hand){
             if (card.getValue() != this.getNumber() ) {
+                // removes card from hand and adds its to the players discard deck
                 this.removeCard(card);
                 this.discardDeck.enqueue(card);
                 String discardMsg = ("player " + this.getNumber() + " discards a " + card.getValue() + " to deck " + this.discardDeck.getDeckNumber());
@@ -146,33 +124,71 @@ public class Player extends Thread{
             }
         }}
 
-    private void writeToFile(String message) {
-        try {
-            FileWriter writer = new FileWriter(this.outputFile,true);
-            writer.write(message);
-            writer.write("\n");
-            writer.close();
+
+    // checks win state of a player and ends the game if necessary
+    public synchronized void checkWinState(){
+    int firstVal = this.hand.get(0).getValue();
+    boolean allEqual = true;
+    // checks if all cards are equal
+    for (Card card: this.hand){
+        if (firstVal != card.getValue()) {
+            allEqual = false;
+            break;
         }
-        catch(IOException e){}
+    }
+    // if the player has won - proceeds with ending the game
+    if (allEqual){
+        String winMsg = ("player " + this.getNumber() + " wins");
+        System.out.println(winMsg);
+        this.writeToFile(winMsg);
+        // stops running current player
+        running = false;
+        // interrupts every other player
+        for (Player player : activePlayers){
+            player.interrupt();
+            if (player != this){
+                // writes to output file
+                String notWinMsg = ("player "+this.getNumber()+" has informed "+" player "+player.getNumber()+ " that player " + this.getNumber() + " has won");
+                player.writeToFile(notWinMsg);
+            }
+            // writes to output file
+            String exitMsg = ("player " + player.getNumber() + " exits");
+            String handMsg = ("player " + player.getNumber() + " hand: " + player.handToStr());
+            player.writeToFile(exitMsg);
+            player.writeToFile(handMsg);
+            }
+        // writes card deck txt files
+        for (CardDeck deck : CardDeck.activeCardDecks){
+            deck.writeToFile();
+        }
+        }
 
     }
 
 
+    // main method for running the player threads
     @Override
     public void run() {
+        // continues looping while game hasnt ended
         while (running) {
-            try{barrier.await();}
-            catch(InterruptedException e){break;}
-            catch(BrokenBarrierException e){}
+            // waits for every player to run before rerunning
+            //try{barrier.await();}
+            //catch(InterruptedException e){break;}
+            //catch(BrokenBarrierException e){}
+            // checks if the player has won
             this.checkWinState();
 
+            // breaks out of loop if player has won to stop execution of next methods
             if (!running) {
                 break;
             }
 
+            // draws and discards
             this.drawAndDiscard();
+            // writes current hand to txt file
             String handMsg = ("player " + this.getNumber() + " current hand is " + this.handToStr());
             this.writeToFile(handMsg);
+            // waits for every player to draw and discard before continuing
             try{barrier.await();}
             catch(InterruptedException e){break;}
             catch(BrokenBarrierException e){}

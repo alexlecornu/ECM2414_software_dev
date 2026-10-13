@@ -40,9 +40,9 @@ player 1 discards a 5 to deck 2
 player 1 current hand is 1 1 1 6
 player 1 draws a 8 from deck 1
 player 1 discards a 6 to deck 2
-player 1 current hand is 1 1 1 8
-player 2 has informed  player 1 that player 2 has won
 player 3 has informed  player 1 that player 3 has won
+player 2 has informed  player 1 that player 2 has won
+player 1 current hand is 1 1 1 8
 player 1 exits
 player 1 exits
 player 1 hand: 1 1 1 8
