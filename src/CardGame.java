@@ -9,6 +9,7 @@ import java.io.IOException;
 class CardGame {
     public static void main(String[] args)
     {
+        // prepares game and starts player threads, every other action is handled in the player class after this
         initialise();
         Player.writeInitialHands();
         Player.setBarrier();
@@ -18,6 +19,7 @@ class CardGame {
 
     }
 
+    // initialises players, handles input pack and deals cards
     public static void initialise() {
         int playerNum = playerInput();
         packInput(playerNum);
@@ -26,6 +28,7 @@ class CardGame {
 
     }
 
+    // gets player input from command line
     public static int playerInput(){
         boolean validPlayerNum = false;
         int playerNum = 0;
@@ -39,17 +42,19 @@ class CardGame {
             }
             validPlayerNum = true;}
 
-        ;
+        // instantiates player and card deck objects
         for(int i = 0; i < playerNum; i++) {
             Player player = new Player();
             CardDeck deck = new CardDeck();
         }
 
-        // HARRY LOOK AT MY CODE
+        // assigns decks to players via drawDeck and discardDeck attributes
         for (int i=0; i <Player.activePlayers.size();i++ ){
             Player p = Player.activePlayers.get(i);
             CardDeck dr = CardDeck.activeCardDecks.get(i);
             p.setDrawDeck(dr);
+
+            // ensures last player discards to first deck - maintains ring topology
             if (i == Player.activePlayers.size()-1){
                 CardDeck dis = CardDeck.activeCardDecks.get(0);
                 p.setDiscardDeck(dis);
@@ -58,14 +63,12 @@ class CardGame {
                 CardDeck dis = CardDeck.activeCardDecks.get(i+1);
                 p.setDiscardDeck(dis);
             }
-
-
-
         }
+        // needs to return num of players for pack input validation
         return playerNum;
     }
 
-
+    // handles pack txt file input
     public static void packInput(int playerNum){
         Scanner scanner = new Scanner(System.in);
         boolean validPack = false;
@@ -75,6 +78,7 @@ class CardGame {
         while (!validPack) {
             System.out.println("Please enter location of pack to load:");
             File packFile = new File(scanner.next());
+            // checks file extension
             if (!(packFile.getName().endsWith(".txt"))) {
                 System.out.println("Invalid file format, pack must be a text file \n");
                 continue;
@@ -101,6 +105,7 @@ class CardGame {
             try (Scanner fileReader = new Scanner(packFile)) {
 
                while (fileReader.hasNextLine()) {
+                   // parses line as an int
                     int nextVal = Integer.parseInt(fileReader.nextLine());
 
                     if (nextVal <0){
