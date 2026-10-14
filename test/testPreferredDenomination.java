@@ -1,13 +1,17 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-public class PreferredDenominationTest {
+public class testPreferredDenomination {
 
     public static Player p1 = new Player();
     public static CardDeck dr = new CardDeck();
     public static CardDeck dis = new CardDeck();
 
+    @BeforeEach
+    public void reset(){
+        Player.resetForTests();
+        CardDeck.resetForTests();
+        Card.resetForTests();
+    }
 
     @BeforeAll
     public static void setup(){
@@ -48,7 +52,11 @@ public class PreferredDenominationTest {
         p1.drawAndDiscard();
         p1.drawAndDiscard();
 
-        
+
         Assertions.assertEquals(1,p1.getHand().getLast().getValue());
+    }
+    @AfterEach
+    public void cleanupMethod(){
+
     }
 }

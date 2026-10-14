@@ -14,4 +14,9 @@ public class Card {
     public int getValue(){
         return this.value;
     }
+
+    // testing methods
+    public static void resetForTests(){
+        pack.clear();
+    }
 }

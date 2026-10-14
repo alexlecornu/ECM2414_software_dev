@@ -1,9 +1,17 @@
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-class FIFOTest {
+class testEnqueueAndDequeue {
+    @BeforeEach
+    public void reset(){
+        Player.resetForTests();
+        CardDeck.resetForTests();
+        Card.resetForTests();
+    }
+
     @Test
     public void enqueueTest(){
         // creating the cards and adding cards to the card deck

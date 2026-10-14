@@ -38,6 +38,7 @@ public class Player extends Thread{
     public ArrayList<Card> getHand() {return hand;}
     public CardDeck getDiscardDeck() {return discardDeck;}
     public CardDeck getDrawDeck(){return drawDeck;}
+    public File getOutputFile() {return outputFile;}
 
     // set methods
     public static void setBarrier(){ barrier = new CyclicBarrier(numOfPlayers);}
@@ -46,6 +47,14 @@ public class Player extends Thread{
 
     public void addCard(Card card){this.hand.add(card);}
     public void removeCard(Card card){this.hand.remove(card);}
+
+    // test methods
+    public static void resetForTests(){
+        activePlayers.clear();
+        numOfPlayers = 0;
+        running = true;
+        barrier = null;
+    }
 
     // writes each players starting hands to their respective txt files
     public static void writeInitialHands() {

@@ -1,8 +1,17 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-public class HandLengthTest {
+public class testDrawAndDiscard {
+    @BeforeEach
+    public void reset(){
+        Player.resetForTests();
+        CardDeck.resetForTests();
+        Card.resetForTests();
+    }
+
+
     @Test
     public void handLength(){
         // creates the player object

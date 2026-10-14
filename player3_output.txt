@@ -1,1 +1,0 @@
-player 3 draws a 3 from deck 3

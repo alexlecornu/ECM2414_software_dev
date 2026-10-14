@@ -39,6 +39,12 @@ public class CardDeck {
         return deck.remove(0);
     }
 
+    //testing methods
+    public static void resetForTests(){
+        activeCardDecks.clear();
+        numOfDecks = 0;
+    }
+
     // writes deck contents to output file
     public void writeToFile(){
         // builds message to be added to the file
