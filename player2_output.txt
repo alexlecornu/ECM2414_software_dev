@@ -1,0 +1,3 @@
+player 2 wins
+player 2 exits
+player 2 hand: 1 1 1 1
