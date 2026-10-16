@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class testInstantWin {
+public class InstantWinTest {
     // this test is used to determine if a player can win instantly by dealing them 4 cards with the same numbers
     @BeforeEach
     public void reset(){
